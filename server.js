@@ -26,15 +26,16 @@ if (process.env.NODE_ENV === 'production') {
   app.use(cors(corsOptions));
 }
 
+// const reviewRoutes = require('./api/review/review.routes');
 const authRoutes = require('./api/auth/auth.routes');
-const toyRoutes = require('./api/toy/toy.routes');
+const volRoutes = require('./api/vol/vol.routes');
 const userRoutes = require('./api/user/user.routes');
-const reviewRoutes = require('./api/review/review.routes');
 const { connectSockets } = require('./services/socket.service');
 
 // routes
 const setupAsyncLocalStorage = require('./middlewares/setupAls.middleware');
 app.all('*', setupAsyncLocalStorage);
+
 
 // TODO: check with app.use
 app.get('/api/setup-session', (req, res) => {
@@ -45,9 +46,10 @@ app.get('/api/setup-session', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/toy', toyRoutes);
-app.use('/api/review', reviewRoutes);
+app.use('/api/vol', volRoutes);
+// app.use('/api/review', reviewRoutes);
 connectSockets(http, session);
+
 
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/car/123 it will still respond with

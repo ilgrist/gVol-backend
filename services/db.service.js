@@ -7,7 +7,7 @@ module.exports = {
 };
 
 // Database Name
-const dbName = 'toy';
+const dbName = 'gVol';
 
 var dbConn = null;
 
