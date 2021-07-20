@@ -10,40 +10,39 @@ module.exports = {
   add,
 };
 
-
-
-async function query(filterBy = {txt: '',category: 'all', skills: 'all', isOnSite: false, isOnLine: false,}) {
-
+async function query(filterBy) {
   const criteria = _buildCriteria(filterBy);
-
   try {
     const collection = await dbService.getCollection('vol');
     var vols = await collection.find(criteria).toArray();
     let filteredVols = JSON.parse(JSON.stringify(vols));
-			if (filterBy.category === 'all') filteredVols = filteredVols;
-			if (filterBy.category !== 'all') {
-				filteredVols = filteredVols.filter((vol) => {
-          const tags = vol.tags;
-					return tags.some((tag) => tag === filterBy.category);
-				});
-			}
-			if (filterBy.skills === 'all') filteredVols = filteredVols;
-			if (filterBy.skills !== 'all') {
-				filteredVols = filteredVols.filter((vol) => {
-					const skills = vol.reqSkills;
-					return skills.some((skill) => skill === filterBy.skills);
-				});
-			}
-			if (filterBy.isOnLine) {
-				filteredVols = filteredVols.filter((vol) => !vol.loc.isOnsite);
-			}
-			if (filterBy.isOnSite) {
-				filteredVols = filteredVols.filter((vol) => vol.loc.isOnsite);
-			}
-
-			return filteredVols;
-			
-
+    if (filterBy.userId) {
+      filteredVols = filteredVols.filter((vol) => {
+        if (!vol.members) return false;
+        return vol.members.some((member) => {
+          return member._id === filterBy.userId;
+        });
+      });
+    }
+    if (filterBy.category !== 'all') {
+      filteredVols = filteredVols.filter((vol) => {
+        const tags = vol.tags;
+        return tags.some((tag) => tag === filterBy.category);
+      });
+    }
+    if (filterBy.skills !== 'all') {
+      filteredVols = filteredVols.filter((vol) => {
+        const skills = vol.reqSkills;
+        return skills.some((skill) => skill === filterBy.skills);
+      });
+    }
+    if (filterBy.isOnLine) {
+      filteredVols = filteredVols.filter((vol) => !vol.loc.isOnsite);
+    }
+    if (filterBy.isOnSite) {
+      filteredVols = filteredVols.filter((vol) => vol.loc.isOnsite);
+    }
+    return filteredVols;
   } catch (err) {
     logger.error('cannot find vols', err);
     throw err;
@@ -61,7 +60,6 @@ async function getById(volId) {
     throw err;
   }
 }
-
 
 async function remove(volId) {
   try {
@@ -90,7 +88,7 @@ async function update(vol) {
 async function add(vol) {
   try {
     // peek only updatable fields!
-    const volToAdd = JSON.parse(JSON.stringify(vol))
+    const volToAdd = JSON.parse(JSON.stringify(vol));
     const collection = await dbService.getCollection('vol');
     await collection.insertOne(volToAdd);
     return volToAdd;
