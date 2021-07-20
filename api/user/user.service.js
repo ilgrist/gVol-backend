@@ -90,14 +90,6 @@ async function update(user) {
 
 async function add(user) {
   try {
-    // peek only updatable fields!
-    // const userToAdd = {
-    //   username: user.username,
-    //   password: user.password,
-    //   fullname: user.fullname,
-    //   isAdmin: false,
-    // };
-
     const collection = await dbService.getCollection("user");
     await collection.insertOne(user);
     // await collection.insertOne(userToAdd);
