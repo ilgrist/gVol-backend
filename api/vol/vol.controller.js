@@ -2,7 +2,6 @@ const volService = require('./vol.service');
 const socketService = require('../../services/socket.service');
 const logger = require('../../services/logger.service');
 
-
 module.exports = {
   getVol,
   getVols,
@@ -23,11 +22,12 @@ async function getVol(req, res) {
 
 async function getVols(req, res) {
   try {
-    // const {filterBy} = req.body
-
-    // const vols = await volService.query(filter);
-
-    const vols = await volService.query();
+    //COMMENT IT OUT  WHEN WE BUILD A CRITERIA
+    let filterBy = req.query;
+    filterBy = { txt: filterBy.txt || '', category: filterBy.category || 'all', skills: filterBy.skills || 'all', isOnSite: filterBy.isOnSite || false, isOnLine: filterBy.isOnLine || false, userId: filterBy.userId || '' };
+    filterBy.isOnLine = filterBy.isOnLine === 'true';
+    filterBy.isOnSite = filterBy.isOnSite === 'true';
+    const vols = await volService.query(filterBy);
     res.send(vols);
   } catch (err) {
     logger.error('Failed to get vols', err);
@@ -49,7 +49,7 @@ async function updateVol(req, res) {
   console.log('HELLO');
   try {
     const vol = req.body;
-    console.log('vol:', vol)
+    console.log('vol:', vol);
     const updatedVol = await volService.update(vol);
     res.send(updatedVol);
     // socketService.broadcast({ type: 'vol-updated', data: review, to: savedVol._id });
@@ -70,5 +70,3 @@ async function addVol(req, res) {
     res.status(500).send({ err: 'Failed to update vol' });
   }
 }
-
-
