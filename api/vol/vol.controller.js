@@ -23,16 +23,8 @@ async function getVol(req, res) {
 
 async function getVols(req, res) {
   try {
-    //COMMENT IT OUT  WHEN WE BUILD A CRITERIA
     // const {filterBy} = req.body
 
-    // const filter = {
-		// 	txt: filterBy.txt || '',
-		// 	category: filterBy.category,
-		// 	skills: filterBy.skills,
-		// 	isOnSite: filterBy.isOnSite,
-		// 	isOnLine: filterBy.isOnLine,
-		// }
     // const vols = await volService.query(filter);
 
     const vols = await volService.query();
