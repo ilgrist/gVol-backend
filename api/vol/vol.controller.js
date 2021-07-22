@@ -63,6 +63,7 @@ async function addVol(req, res) {
   try {
     const vol = req.body;
     const savedVol = await volService.add(vol);
+    socketService.emitToAll('new vol', savedVol);
     res.send(savedVol);
     // socketService.broadcast({ type: 'vol-updated', data: review, to: savedVol._id });
   } catch (err) {
