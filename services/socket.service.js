@@ -1,5 +1,6 @@
 const asyncLocalStorage = require('./als.service');
 const logger = require('./logger.service');
+const volService = require('../api/vol/vol.service');
 
 var gIo = null;
 
@@ -23,6 +24,7 @@ function connectSockets(http, session) {
       // gIo.emit('chat addMsg', msg)
       // emits only to sockets in the same room
       gIo.to(socket.myTopic).emit('chat addMsg', msg);
+      volService.addMsg(msg, socket.myTopic);
     });
     socket.on('user-watch', (userId) => {
       socket.join('watching:' + userId);

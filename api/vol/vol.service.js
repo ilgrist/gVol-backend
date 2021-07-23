@@ -8,6 +8,7 @@ module.exports = {
   remove,
   update,
   add,
+  addMsg,
 };
 
 async function query(filterBy) {
@@ -103,6 +104,19 @@ async function add(vol) {
   } catch (err) {
     logger.error('cannot insert vol', err);
     throw err;
+  }
+}
+async function addMsg(msg, volId) {
+  try {
+    msg.createdAt = Date.now();
+    const vol = await getById(volId);
+    if (!vol.msgs) vol.msgs = [];
+    vol.msgs.push(msg);
+    const collection = await dbService.getCollection('vol');
+    await collection.updateOne({ _id: vol._id }, { $set: vol });
+    return vol;
+  } catch (err) {
+    console.log("volService: couldn't add msg", err);
   }
 }
 
