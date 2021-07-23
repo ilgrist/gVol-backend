@@ -22,9 +22,8 @@ async function getVol(req, res) {
 
 async function getVols(req, res) {
   try {
-    //COMMENT IT OUT  WHEN WE BUILD A CRITERIA
     let filterBy = req.query;
-    filterBy = { txt: filterBy.txt || '', category: filterBy.category || 'all', skills: filterBy.skills || 'all', isOnSite: filterBy.isOnSite || false, isOnLine: filterBy.isOnLine || false, userId: filterBy.userId || '' };
+    filterBy = { txt: filterBy.txt || '', category: filterBy.category || 'all', skills: filterBy.skills || 'all', isOnSite: filterBy.isOnSite || false, isOnLine: filterBy.isOnLine || false, userId: filterBy.userId || '',availability:filterBy.availability || 'all' };
     filterBy.isOnLine = filterBy.isOnLine === 'true';
     filterBy.isOnSite = filterBy.isOnSite === 'true';
     const vols = await volService.query(filterBy);

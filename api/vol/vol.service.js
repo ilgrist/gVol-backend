@@ -42,6 +42,14 @@ async function query(filterBy) {
     if (filterBy.isOnSite) {
       filteredVols = filteredVols.filter((vol) => vol.loc.isOnsite);
     }
+    if(filterBy.availability === 'avalible'){
+      filteredVols = filteredVols.filter((vol) => {
+        const freePlaces = vol.maxMembers - vol.members.length
+        if(freePlaces){
+          return vol
+        }
+      });
+    }
     return filteredVols;
   } catch (err) {
     logger.error('cannot find vols', err);

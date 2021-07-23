@@ -53,7 +53,6 @@ app.get('/api/setup-session', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/vol', volRoutes);
-// app.use('/api/review', reviewRoutes);
 connectSockets(http, session);
 
 // Make every server-side-route to match the index.html
