@@ -120,6 +120,9 @@ function _buildCriteria(filterBy) {
       {
         title: txtCriteria,
       },
+      {
+        loc: { country: txtCriteria },
+      },
     ];
   }
   return criteria;

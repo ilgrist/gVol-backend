@@ -33,6 +33,10 @@ function connectSockets(http, session) {
       console.log('isTyping:', fullname);
       gIo.to(socket.myTopic).emit('getTyping', fullname);
     });
+    socket.on('new volunteer', ({ vol, user }) => {
+      console.log('new volunteer:', user._id, 'in:', vol._id);
+      gIo.emit('got volunteer', { vol, user });
+    });
     socket.on('set-user-socket', (userId) => {
       logger.debug(`Setting socket.userId = ${userId}`);
       socket.userId = userId;
