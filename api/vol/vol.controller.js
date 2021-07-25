@@ -45,7 +45,6 @@ async function deleteVol(req, res) {
 }
 
 async function updateVol(req, res) {
-  console.log('HELLO');
   try {
     const vol = req.body;
     console.log('vol:', vol);
@@ -63,8 +62,8 @@ async function addVol(req, res) {
     const vol = req.body;
     const savedVol = await volService.add(vol);
     socketService.emitToAll('new vol', savedVol);
+    // socketService.broadcast({ type: 'new vol', data: savedVol, userId: savedVol.createdBy});
     res.send(savedVol);
-    // socketService.broadcast({ type: 'vol-updated', data: review, to: savedVol._id });
   } catch (err) {
     logger.error('Failed to update vol', err);
     res.status(500).send({ err: 'Failed to update vol' });
