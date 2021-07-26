@@ -20,22 +20,21 @@ function connectSockets(http, session) {
       socket.myTopic = topic;
     });
     socket.on('chat newMsg', (msg) => {
-      // emits to all sockets:
-      // gIo.emit('chat addMsg', msg)
-      // emits only to sockets in the same room
       gIo.to(socket.myTopic).emit('chat addMsg', msg);
       volService.addMsg(msg, socket.myTopic);
+    });
+    socket.on('stoppedTyping', () => {
+      gIo.to(socket.myTopic).emit('stoppedTyping');
     });
     socket.on('user-watch', (userId) => {
       socket.join('watching:' + userId);
     });
     socket.on('isTyping', (fullname) => {
-      console.log('isTyping:', fullname);
       gIo.to(socket.myTopic).emit('getTyping', fullname);
     });
     socket.on('new volunteer', ({ vol, user }) => {
       console.log('new volunteer:', user._id, 'in:', vol._id);
-      gIo.emit('got volunteer', { vol, user });
+      socket.broadcast.emit('got volunteer', { vol, user });
     });
     socket.on('set-user-socket', (userId) => {
       logger.debug(`Setting socket.userId = ${userId}`);
