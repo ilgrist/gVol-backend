@@ -35,6 +35,7 @@ function connectSockets(http, session) {
     socket.on('new volunteer', ({ vol, user }) => {
       console.log('new volunteer:', user._id, 'in:', vol._id);
       socket.broadcast.emit('got volunteer', { vol, user });
+      
     });
     socket.on('set-user-socket', (userId) => {
       logger.debug(`Setting socket.userId = ${userId}`);
